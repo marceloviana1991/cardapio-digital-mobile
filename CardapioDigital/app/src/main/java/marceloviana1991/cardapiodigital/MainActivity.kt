@@ -6,10 +6,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import marceloviana1991.cardapiodigital.databinding.ActivityMainBinding
 import marceloviana1991.cardapiodigital.http.RetrofitClient
+import okio.IOException
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,15 +29,16 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val token = intent.getStringExtra("token")
-        val mainScope = MainScope()
-        mainScope.launch {
+        lifecycleScope.launch {
+            val sharedPref = getSharedPreferences("APP_PREFS", MODE_PRIVATE)
+            val token = sharedPref.getString("TOKEN", "") ?: ""
             try {
-                val listaDeGrupos = RetrofitClient.instance.listarGrupos(token!!)
+                val response = RetrofitClient.instance.listarGrupos(token!!)
+            } catch (e: IOException) {
+                Toast.makeText(this@MainActivity, "Falha de conexão", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
-                Toast.makeText(this@MainActivity, "Falha na requisição", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Erro inesperado", Toast.LENGTH_SHORT).show()
             }
-
         }
     }
 }

@@ -7,11 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import marceloviana1991.cardapiodigital.databinding.ActivityLoginBinding
 import marceloviana1991.cardapiodigital.dto.LoginRequest
 import marceloviana1991.cardapiodigital.http.RetrofitClient
+import okio.IOException
 
 class LoginActivity : AppCompatActivity() {
 
@@ -29,23 +31,27 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.buttonConfirmar.setOnClickListener {
-
-            val mainScope = MainScope()
-            mainScope.launch {
+            lifecycleScope.launch {
                 try {
                     val login = binding.editTextLogin.text.toString()
                     val senha = binding.editTextSenha.text.toString()
-                    val token = RetrofitClient.instance.login(LoginRequest(login, senha))
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    intent.putExtra("token", token.token)
-                    startActivity(intent)
-                    finish()
+                    val response = RetrofitClient.instance.login(LoginRequest(login, senha))
+                    if (response.isSuccessful) {
+                        val token = response.body()?.token
+                        val sharedPref = getSharedPreferences("APP_PREFS", MODE_PRIVATE)
+                        sharedPref.edit().putString("TOKEN", token).apply()
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        Toast.makeText(this@LoginActivity, "Falha no login", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: IOException) {
+                    Toast.makeText(this@LoginActivity, "Falha de conexão", Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
-                    Toast.makeText(this@LoginActivity, "Falha no login", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, "Erro inesperado", Toast.LENGTH_SHORT).show()
                 }
             }
-
-
         }
     }
 
