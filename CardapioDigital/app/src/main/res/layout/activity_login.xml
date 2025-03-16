@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_margin="15dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seja bem-vindo!"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:layout_margin="20dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Insira seus dados para realizar a autenticação"
+        android:textStyle="italic"/>
+
+    <EditText
+        android:id="@+id/edit_text_login"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Usuário"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/baseline_account_circle_24"
+        android:inputType="text"
+        />
+
+    <EditText
+        android:id="@+id/edit_text_senha"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Senha"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/baseline_lock_24"
+        android:inputType="textPassword"
+        />
+
+    <Button
+        android:id="@+id/button_confirmar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Confirmar"
+        android:layout_margin="10dp"
+        />
+
+
+
+</LinearLayout>
