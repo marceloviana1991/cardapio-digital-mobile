@@ -33,6 +33,7 @@
         android:drawablePadding="10dp"
         android:drawableStart="@drawable/baseline_account_circle_24"
         android:inputType="text"
+        android:layout_marginTop="30dp"
         />
 
     <EditText
@@ -43,6 +44,7 @@
         android:drawablePadding="10dp"
         android:drawableStart="@drawable/baseline_lock_24"
         android:inputType="textPassword"
+        android:layout_marginBottom="30dp"
         />
 
     <Button
