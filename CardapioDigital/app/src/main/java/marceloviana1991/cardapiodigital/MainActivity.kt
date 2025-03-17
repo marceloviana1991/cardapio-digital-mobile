@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import marceloviana1991.cardapiodigital.adapter.GrupoAdapter
 import marceloviana1991.cardapiodigital.databinding.ActivityMainBinding
 import marceloviana1991.cardapiodigital.http.RetrofitClient
 import okio.IOException
@@ -33,11 +34,9 @@ class MainActivity : AppCompatActivity() {
             val token = sharedPref.getString("TOKEN", "") ?: ""
             try {
                 val responseGrupo = RetrofitClient.instance.listarGrupos(token)
-                val grupoId = responseGrupo.body()?.first()?.id
-                val responseProduto = RetrofitClient.instance.listarProdutosPorGrupo(token, grupoId!!)
-                val nome = responseProduto.body()?.first()?.nome
-                binding.text.text = nome
-
+                responseGrupo.body()?.let {
+                    binding.recyclerview.adapter = GrupoAdapter(it)
+                }
             } catch (e: IOException) {
                 Toast.makeText(this@MainActivity, "Falha de conexão", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
