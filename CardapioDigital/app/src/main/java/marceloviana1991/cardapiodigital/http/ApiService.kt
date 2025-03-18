@@ -21,6 +21,6 @@ interface ApiService {
 
     @GET("produto/{grupoId}")
     suspend fun listarProdutosPorGrupo(
-        @Header("Authorization") token: String, @Path("grupoId") grupoId: Long
+        @Header("Authorization") token: String, @Path("grupoId") grupoId: Int
     ): Response<List<ProdutoResponse>>
 }
