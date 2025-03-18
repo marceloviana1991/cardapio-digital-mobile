@@ -1,5 +1,6 @@
 package marceloviana1991.cardapiodigital
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -29,8 +30,18 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        val sharedPref = getSharedPreferences("APP_PREFS", MODE_PRIVATE)
+
+        binding.imageButton.setOnClickListener {
+            sharedPref.edit().putString("LOGIN", "").apply()
+            sharedPref.edit().putString("SENHA", "").apply()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         lifecycleScope.launch {
-            val sharedPref = getSharedPreferences("APP_PREFS", MODE_PRIVATE)
+
             val token = sharedPref.getString("TOKEN", "") ?: ""
             try {
                 val responseGrupo = RetrofitClient.instance.listarGrupos(token)

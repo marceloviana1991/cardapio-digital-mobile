@@ -48,6 +48,7 @@
         android:layout_marginHorizontal="15dp"
         />
 
+
     <Button
         android:id="@+id/button_confirmar"
         android:layout_width="match_parent"
@@ -55,6 +56,11 @@
         android:text="Confirmar"
         android:layout_marginHorizontal="15dp"
         />
+    <CheckBox
+        android:id="@+id/chkKeepMeLogged"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Manter-me conectado" />
 
 
 

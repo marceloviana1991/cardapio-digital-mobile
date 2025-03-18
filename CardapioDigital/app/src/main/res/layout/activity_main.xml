@@ -8,13 +8,33 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:text="Grupos de produto"
-        android:layout_margin="20dp"
-        android:textStyle="bold"/>
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:layout_weight="9"
+            android:text="Grupos de produto"
+            android:layout_margin="20dp"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:id="@+id/imageButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="20dp"
+
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/baseline_logout_24"/>
+
+
+    </LinearLayout>
+
+
 
     <TextView
         android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package marceloviana1991.cardapiodigital
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -20,6 +21,7 @@ class LoginActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,16 +32,36 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+        val sharedPref = getSharedPreferences("APP_PREFS", MODE_PRIVATE)
+        val loginGravado = sharedPref.getString("LOGIN", "") ?: ""
+        val senhaGravado = sharedPref.getString("SENHA", "") ?: ""
+        if (loginGravado.isNotEmpty()) {
+            lifecycleScope.launch {
+                val response = RetrofitClient.instance.login(LoginRequest(loginGravado, senhaGravado))
+                if (response.isSuccessful) {
+                    val token = response.body()?.token
+                    sharedPref.edit().putString("TOKEN", token).apply()
+                }
+                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
+
         binding.buttonConfirmar.setOnClickListener {
             lifecycleScope.launch {
                 try {
                     val login = binding.editTextLogin.text.toString()
                     val senha = binding.editTextSenha.text.toString()
+                    val checkbox = binding.chkKeepMeLogged.isChecked
                     val response = RetrofitClient.instance.login(LoginRequest(login, senha))
                     if (response.isSuccessful) {
                         val token = response.body()?.token
-                        val sharedPref = getSharedPreferences("APP_PREFS", MODE_PRIVATE)
                         sharedPref.edit().putString("TOKEN", token).apply()
+                        if (checkbox) {
+                            sharedPref.edit().putString("LOGIN", login).apply()
+                            sharedPref.edit().putString("SENHA", senha).apply()
+                        }
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
                         finish()
