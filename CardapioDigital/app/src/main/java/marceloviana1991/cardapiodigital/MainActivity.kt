@@ -1,7 +1,9 @@
 package marceloviana1991.cardapiodigital
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -11,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import marceloviana1991.cardapiodigital.adapter.GrupoAdapter
 import marceloviana1991.cardapiodigital.databinding.ActivityMainBinding
-import marceloviana1991.cardapiodigital.dto.GrupoResponse
 import marceloviana1991.cardapiodigital.http.RetrofitClient
 import okio.IOException
 
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -51,6 +53,13 @@ class MainActivity : AppCompatActivity() {
                             val intent = Intent(this@MainActivity, ProdutoActivity::class.java)
                             intent.putExtra("GRUPO", grupo.id)
                             startActivity(intent)
+
+                            /*FALTA IMPLEMENTAR
+                            *
+                            * O botão aparece quando adiciona o primeiro item ao pedido
+                            */
+                            binding.floatingActionButtonConfirmar.visibility = View.VISIBLE
+                            binding.floatingActionButtonCancelar.visibility = View.VISIBLE
                         })
                 }
             } catch (e: IOException) {
@@ -60,4 +69,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 }

@@ -37,14 +37,18 @@ class LoginActivity : AppCompatActivity() {
         val senhaGravado = sharedPref.getString("SENHA", "") ?: ""
         if (loginGravado.isNotEmpty()) {
             lifecycleScope.launch {
-                val response = RetrofitClient.instance.login(LoginRequest(loginGravado, senhaGravado))
-                if (response.isSuccessful) {
-                    val token = response.body()?.token
-                    sharedPref.edit().putString("TOKEN", token).apply()
+                try {
+                    val response = RetrofitClient.instance.login(LoginRequest(loginGravado, senhaGravado))
+                    if (response.isSuccessful) {
+                        val token = response.body()?.token
+                        sharedPref.edit().putString("TOKEN", token).apply()
+                    }
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } catch (e: IOException) {
+                    Toast.makeText(this@LoginActivity, "Falha de conexão", Toast.LENGTH_SHORT).show()
                 }
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                startActivity(intent)
-                finish()
             }
         }
 
