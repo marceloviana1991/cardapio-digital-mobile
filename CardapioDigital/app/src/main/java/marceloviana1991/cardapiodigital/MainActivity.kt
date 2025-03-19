@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                             val intent = Intent(
                                 this@MainActivity, ProdutoActivity::class.java
                             ).apply {
-                                putExtra("GRUPO_ID", grupo.id)
+                                sharedPref.edit().putInt("GRUPO_ID", grupo.id.toInt()).apply()
                                 putExtra("GRUPO_IMAGEM", grupo.imagem)
                             }
                             startActivity(intent)

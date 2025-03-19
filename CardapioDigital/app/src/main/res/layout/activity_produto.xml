@@ -31,8 +31,9 @@
         android:layout_marginHorizontal="15dp" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:listitem="@layout/adapter_produto"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
@@ -40,7 +41,8 @@
         android:id="@+id/button_confirmar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Confirmar" />
+        android:text="Confirmar"
+        android:layout_marginHorizontal="15dp" />
 
 
 

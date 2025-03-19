@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import marceloviana1991.cardapiodigital.adapter.ProdutoAdapter
 import marceloviana1991.cardapiodigital.databinding.ActivityProdutoBinding
 import marceloviana1991.cardapiodigital.http.RetrofitClient
 import okio.IOException
@@ -31,7 +32,7 @@ class ProdutoActivity : AppCompatActivity() {
         }
 
         val sharedPref = getSharedPreferences("APP_PREFS", MODE_PRIVATE)
-        val grupoId = intent.getIntExtra("GRUPO_ID",0)
+
         val grupoImagem = intent.getStringExtra("GRUPO_IMAGEM")
 
         val decodedBytes = Base64.decode(grupoImagem, Base64.DEFAULT)
@@ -40,10 +41,12 @@ class ProdutoActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val token = sharedPref.getString("TOKEN", "") ?: ""
+            val grupoId = sharedPref.getInt("GRUPO_ID", 0)
             try {
                 val responseProduto = RetrofitClient.instance.listarProdutosPorGrupo(token, grupoId)
                 responseProduto.body()?.let { produtos ->
-
+                    val adapter = ProdutoAdapter(produtos)
+                    binding.recyclerview.adapter = adapter
                 }
             } catch (e: IOException) {
                 Toast.makeText(this@ProdutoActivity, "Falha de conexão", Toast.LENGTH_SHORT).show()
