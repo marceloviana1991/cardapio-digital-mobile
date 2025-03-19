@@ -3,9 +3,9 @@ package marceloviana1991.cardapiodigital
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import marceloviana1991.cardapiodigital.adapter.GrupoAdapter
 import marceloviana1991.cardapiodigital.databinding.ActivityMainBinding
 import marceloviana1991.cardapiodigital.http.RetrofitClient
+import marceloviana1991.cardapiodigital.memory.PedidoMemory
 import okio.IOException
 
 class MainActivity : AppCompatActivity() {
@@ -66,6 +67,56 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, "Erro inesperado", Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.floatingActionButtonCancelar.setOnClickListener {
+            PedidoMemory.limpar()
+        }
+
+        binding.floatingActionButtonConfirmar.setOnClickListener {
+                AlertDialog.Builder(this@MainActivity)
+                    .setTitle("Adicionar itens ao pedido")
+                    .setMessage("Deseja confirmar operação?")
+                    .setPositiveButton("CONFIRMAR" ) { _, _ ->
+                        val token = sharedPref.getString("TOKEN", "") ?: ""
+                        val pedidosEmMemoria = PedidoMemory.registrar()
+                        lifecycleScope.launch {
+                            try {
+                                // Chamada de Retrofit suspensa
+                                val response =
+                                    RetrofitClient.instance.registrarPedido(token, pedidosEmMemoria)
+
+                                // Verificando a resposta
+                                if (response.isSuccessful) {
+                                    // Se o pedido foi registrado com sucesso
+                                    PedidoMemory.limpar() // Limpa os pedidos em memória
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "Pedido registrado com sucesso",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    // Se ocorreu um erro ao registrar
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "Erro ao registrar o pedido",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            } catch (e: Exception) {
+                                // Lidar com erro de rede ou outra falha
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    "Erro de conexão: ${e.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                        }
+                    }
+                    .setNegativeButton("CANCELAR", null)
+                    .show()
+
+            }
+        }
     }
 
-}

@@ -4,6 +4,7 @@ import marceloviana1991.cardapiodigital.dto.GrupoResponse
 import marceloviana1991.cardapiodigital.dto.LoginRequest
 import marceloviana1991.cardapiodigital.dto.LoginResponse
 import marceloviana1991.cardapiodigital.dto.ProdutoResponse
+import marceloviana1991.cardapiodigital.memory.ItemPedido
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -19,11 +20,13 @@ interface ApiService {
     @GET("grupo")
     suspend fun listarGrupos(@Header("Authorization") token: String): Response<List<GrupoResponse>>
 
-    @GET("grupo/{id}")
-    suspend fun recuperarGrupo(@Header("Authorization") token: String, @Path("id") id: Int): Response<GrupoResponse>
-
     @GET("produto/{grupoId}")
     suspend fun listarProdutosPorGrupo(
         @Header("Authorization") token: String, @Path("grupoId") grupoId: Int
     ): Response<List<ProdutoResponse>>
+
+    @POST("pedido")
+    suspend fun registrarPedido(
+        @Header("Authorization") token: String, @Body pedido: List<ItemPedido>
+    ): Response<Void>
 }

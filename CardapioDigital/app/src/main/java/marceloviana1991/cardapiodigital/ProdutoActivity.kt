@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Base64
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 import marceloviana1991.cardapiodigital.adapter.ProdutoAdapter
 import marceloviana1991.cardapiodigital.databinding.ActivityProdutoBinding
 import marceloviana1991.cardapiodigital.http.RetrofitClient
+import marceloviana1991.cardapiodigital.memory.PedidoMemory
 import okio.IOException
 
 class ProdutoActivity : AppCompatActivity() {
@@ -47,12 +49,29 @@ class ProdutoActivity : AppCompatActivity() {
                 responseProduto.body()?.let { produtos ->
                     val adapter = ProdutoAdapter(produtos)
                     binding.recyclerview.adapter = adapter
+                    binding.buttonConfirmar.setOnClickListener {
+                        AlertDialog.Builder(this@ProdutoActivity)
+                            .setTitle("Adicionar itens ao pedido")
+                            .setMessage("Deseja confirmar operação?")
+                            .setPositiveButton("CONFIRMAR" ) { _, _ ->
+                                val listaDeItens = adapter.finalizaPedido()
+                                listaDeItens.forEach {
+                                    PedidoMemory.adicionar(it)
+                                }
+                                finish()
+                            }
+                            .setNegativeButton("CANCELAR", null)
+                            .show()
+                    }
                 }
+
             } catch (e: IOException) {
                 Toast.makeText(this@ProdutoActivity, "Falha de conexão", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Toast.makeText(this@ProdutoActivity, "Erro inesperado", Toast.LENGTH_SHORT).show()
             }
         }
+
+
     }
 }
