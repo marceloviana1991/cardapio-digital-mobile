@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                     binding.recyclerview.adapter =
                         GrupoAdapter(grupos, GrupoAdapter.OnClickListener { grupo ->
                             val intent = Intent(this@MainActivity, ProdutoActivity::class.java)
-                            intent.putExtra("GRUPO", grupo.id)
+                            sharedPref.edit().putInt("GRUPO", grupo.id.toInt()).apply()
                             startActivity(intent)
 
                             /*FALTA IMPLEMENTAR

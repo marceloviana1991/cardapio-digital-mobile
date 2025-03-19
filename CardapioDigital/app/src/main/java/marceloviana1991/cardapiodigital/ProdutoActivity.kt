@@ -1,6 +1,8 @@
 package marceloviana1991.cardapiodigital
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -29,16 +31,22 @@ class ProdutoActivity : AppCompatActivity() {
         }
 
         val sharedPref = getSharedPreferences("APP_PREFS", MODE_PRIVATE)
-
-        val grupoId = intent.getIntExtra("GRUPO", 0)
+        val grupoId = sharedPref.getInt("GRUPO", 0)
 
         lifecycleScope.launch {
             val token = sharedPref.getString("TOKEN", "") ?: ""
             try {
-                val responseProduto = RetrofitClient.instance.listarProdutosPorGrupo(token, grupoId)
-                responseProduto.body()?.let { produtos ->
-
+                val responseGrupo = RetrofitClient.instance.recuperarGrupo(token, grupoId)
+                responseGrupo.body()?.let { grupo ->
+                    val decodedBytes = Base64.decode(grupo.imagem, Base64.DEFAULT)
+                    val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                    binding.imageView.setImageBitmap(bitmap)
                 }
+
+//                val responseProduto = RetrofitClient.instance.listarProdutosPorGrupo(token, grupoId)
+//                responseProduto.body()?.let { produtos ->
+//
+//                }
             } catch (e: IOException) {
                 Toast.makeText(this@ProdutoActivity, "Falha de conexão", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {

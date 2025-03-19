@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="15dp">
-
+    android:layout_height="200dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="4dp"
+    android:layout_margin="15dp">
     <ImageView
         android:id="@+id/imageViewGrupo"
         android:layout_width="match_parent"
@@ -20,5 +20,12 @@
         android:layout_height="wrap_content"
         android:text="Nome"
         android:textSize="20sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:layout_margin="15dp"
         />
-</LinearLayout>
+</androidx.cardview.widget.CardView>
+
+
