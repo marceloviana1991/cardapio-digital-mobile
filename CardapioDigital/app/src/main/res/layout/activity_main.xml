@@ -46,25 +46,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/floatingActionButton_confirmar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/floatingActionButton_cancelar"
             android:layout_margin="15dp"
-            app:srcCompat="@drawable/baseline_add_task_24"
-            android:backgroundTint="#4CAF50"/>
+            app:icon="@drawable/baseline_add_task_24"
+            android:text="Finalizar"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/floatingActionButton_cancelar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/baseline_not_interested_24"
-            app:layout_constraintBottom_toTopOf="@+id/floatingActionButton_confirmar"
+            app:icon="@drawable/baseline_not_interested_24"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="15dp"
-            android:backgroundTint="#F44336" />
+
+            android:text="Cancelar"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
@@ -73,6 +74,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/adapter_grupo"
+
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 
