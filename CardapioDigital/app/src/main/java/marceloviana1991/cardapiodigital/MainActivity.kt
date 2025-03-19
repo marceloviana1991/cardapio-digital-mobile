@@ -70,16 +70,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val finalizarPedidoBinding = FinalizarPedidoBinding.inflate(layoutInflater)
 
-        val adapterFinalizarPedido = ArrayAdapter(
-            finalizarPedidoBinding.root.context,
-            android.R.layout.simple_list_item_1,
-            PedidoMemory.registrarPedidoPorNome()
-        )
-        finalizarPedidoBinding.listViewFinalizarPedido.adapter = adapterFinalizarPedido
 
         binding.floatingActionButtonCancelar.setOnClickListener {
+            val finalizarPedidoBinding = FinalizarPedidoBinding.inflate(layoutInflater)
+
+            val adapterFinalizarPedido = ArrayAdapter(
+                finalizarPedidoBinding.root.context,
+                android.R.layout.simple_list_item_1,
+                PedidoMemory.registrarPedidoPorNome()
+            )
+            finalizarPedidoBinding.listViewFinalizarPedido.adapter = adapterFinalizarPedido
             AlertDialog.Builder(this@MainActivity)
                 .setTitle("Cancelar pedido")
                 .setMessage("Deseja confirmar operação?")
@@ -92,6 +93,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.floatingActionButtonConfirmar.setOnClickListener {
+            val finalizarPedidoBinding = FinalizarPedidoBinding.inflate(layoutInflater)
+
+            val adapterFinalizarPedido = ArrayAdapter(
+                finalizarPedidoBinding.root.context,
+                android.R.layout.simple_list_item_1,
+                PedidoMemory.registrarPedidoPorNome()
+            )
+            finalizarPedidoBinding.listViewFinalizarPedido.adapter = adapterFinalizarPedido
                 AlertDialog.Builder(this@MainActivity)
                     .setTitle("Confirmar pedido")
                     .setMessage("Deseja confirmar operação?")

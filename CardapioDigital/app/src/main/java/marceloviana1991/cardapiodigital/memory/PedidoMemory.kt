@@ -10,6 +10,7 @@ object PedidoMemory {
 
     fun limpar() {
         pedido.clear()
+        pedidoPorNome.clear()
     }
 
     fun registrar(): List<ItemPedido> {
