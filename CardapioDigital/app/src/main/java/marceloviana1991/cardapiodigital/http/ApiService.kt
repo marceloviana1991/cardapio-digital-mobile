@@ -29,4 +29,9 @@ interface ApiService {
     suspend fun registrarPedido(
         @Header("Authorization") token: String, @Body pedido: List<ItemPedido>
     ): Response<Void>
+
+    @GET("produto/detalhamento/{id}")
+    suspend fun detalhamentoProduto(
+        @Header("Authorization") token: String, @Path("id") id: Int
+    ): ProdutoResponse
 }

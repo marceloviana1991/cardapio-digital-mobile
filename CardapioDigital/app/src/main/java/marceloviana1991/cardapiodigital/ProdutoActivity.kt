@@ -55,8 +55,12 @@ class ProdutoActivity : AppCompatActivity() {
                             .setMessage("Deseja confirmar operação?")
                             .setPositiveButton("CONFIRMAR" ) { _, _ ->
                                 val listaDeItens = adapter.finalizaPedido()
+                                val listaDeItensPorNome = adapter.finalizaPedidoPorNome()
                                 listaDeItens.forEach {
                                     PedidoMemory.adicionar(it)
+                                }
+                                listaDeItensPorNome.forEach {
+                                    PedidoMemory.adicionarPedidoPorNome(it)
                                 }
                                 finish()
                             }

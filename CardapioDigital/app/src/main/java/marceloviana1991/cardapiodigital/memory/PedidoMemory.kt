@@ -2,6 +2,7 @@ package marceloviana1991.cardapiodigital.memory
 
 object PedidoMemory {
     private val pedido = ArrayList<ItemPedido>()
+    private val pedidoPorNome =  ArrayList<ItemPedidoPorNome>()
 
     fun adicionar(itemPedido: ItemPedido) {
         this.pedido.add(itemPedido)
@@ -13,5 +14,13 @@ object PedidoMemory {
 
     fun registrar(): List<ItemPedido> {
         return pedido
+    }
+
+    fun adicionarPedidoPorNome(itemPedidoPorNome: ItemPedidoPorNome) {
+        pedidoPorNome.add(itemPedidoPorNome)
+    }
+
+    fun registrarPedidoPorNome(): List<ItemPedidoPorNome> {
+        return pedidoPorNome
     }
 }

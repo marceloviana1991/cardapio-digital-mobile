@@ -9,12 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import marceloviana1991.cardapiodigital.R
 import marceloviana1991.cardapiodigital.dto.ProdutoResponse
 import marceloviana1991.cardapiodigital.memory.ItemPedido
+import marceloviana1991.cardapiodigital.memory.ItemPedidoPorNome
 
 class ProdutoAdapter(
     private val produtos: List<ProdutoResponse>
 ) : RecyclerView.Adapter<ProdutoAdapter.ProdutoViewHolder>() {
 
     private val itensPedido: MutableList<ItemPedido> = ArrayList()
+    private val itensPedidoPorNome: MutableList<ItemPedidoPorNome> = ArrayList()
 
 
 
@@ -45,10 +47,13 @@ class ProdutoAdapter(
 
         holder.adicionar.setOnClickListener {
             if (quantidade==0) {
+                this.itensPedidoPorNome.add(ItemPedidoPorNome(quantidade+1, produto.nome))
                 this.itensPedido.add(ItemPedido(quantidade+1, produto.id.toInt()))
             } else {
                 this.itensPedido.remove(ItemPedido(quantidade, produto.id.toInt()))
+                this.itensPedidoPorNome.remove(ItemPedidoPorNome(quantidade, produto.nome))
                 this.itensPedido.add(ItemPedido(quantidade+1, produto.id.toInt()))
+                this.itensPedidoPorNome.add(ItemPedidoPorNome(quantidade+1, produto.nome))
             }
             quantidade += 1
             holder.quantidade.text = quantidade.toString()
@@ -58,10 +63,13 @@ class ProdutoAdapter(
             if (quantidade > 0) {
                 quantidade -= 1
                 if (quantidade==0) {
+                    this.itensPedidoPorNome.remove(ItemPedidoPorNome(quantidade, produto.nome))
                     this.itensPedido.remove(ItemPedido(quantidade, produto.id.toInt()))
                 } else {
+                    this.itensPedidoPorNome.remove(ItemPedidoPorNome(quantidade, produto.nome))
                     this.itensPedido.remove(ItemPedido(quantidade, produto.id.toInt()))
                     this.itensPedido.add(ItemPedido(quantidade, produto.id.toInt()))
+                    this.itensPedidoPorNome.add(ItemPedidoPorNome(quantidade, produto.nome))
                 }
                 holder.quantidade.text = quantidade.toString()
             }
@@ -70,5 +78,9 @@ class ProdutoAdapter(
 
     fun finalizaPedido(): List<ItemPedido> {
         return itensPedido
+    }
+
+    fun finalizaPedidoPorNome(): List<ItemPedidoPorNome> {
+        return itensPedidoPorNome
     }
 }

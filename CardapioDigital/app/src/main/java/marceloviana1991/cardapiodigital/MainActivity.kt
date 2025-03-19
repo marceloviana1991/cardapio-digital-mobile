@@ -3,6 +3,7 @@ package marceloviana1991.cardapiodigital
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -13,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import marceloviana1991.cardapiodigital.adapter.GrupoAdapter
 import marceloviana1991.cardapiodigital.databinding.ActivityMainBinding
+import marceloviana1991.cardapiodigital.databinding.FinalizarPedidoBinding
 import marceloviana1991.cardapiodigital.http.RetrofitClient
 import marceloviana1991.cardapiodigital.memory.PedidoMemory
 import okio.IOException
@@ -68,10 +70,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        val finalizarPedidoBinding = FinalizarPedidoBinding.inflate(layoutInflater)
+
+        val adapterFinalizarPedido = ArrayAdapter(
+            finalizarPedidoBinding.root.context,
+            android.R.layout.simple_list_item_1,
+            PedidoMemory.registrarPedidoPorNome()
+        )
+        finalizarPedidoBinding.listViewFinalizarPedido.adapter = adapterFinalizarPedido
+
         binding.floatingActionButtonCancelar.setOnClickListener {
             AlertDialog.Builder(this@MainActivity)
-                .setTitle("Exckuir itens ao pedido")
+                .setTitle("Cancelar pedido")
                 .setMessage("Deseja confirmar operação?")
+                .setView(finalizarPedidoBinding.root)
                 .setPositiveButton("CONFIRMAR" ) { _, _ ->
                     PedidoMemory.limpar()
                 }
@@ -81,8 +93,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.floatingActionButtonConfirmar.setOnClickListener {
                 AlertDialog.Builder(this@MainActivity)
-                    .setTitle("Adicionar itens ao pedido")
+                    .setTitle("Confirmar pedido")
                     .setMessage("Deseja confirmar operação?")
+                    .setView(finalizarPedidoBinding.root)
                     .setPositiveButton("CONFIRMAR" ) { _, _ ->
                         val token = sharedPref.getString("TOKEN", "") ?: ""
                         val pedidosEmMemoria = PedidoMemory.registrar()
