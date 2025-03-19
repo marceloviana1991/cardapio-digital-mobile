@@ -14,18 +14,27 @@ import android.util.Base64
 
 class GrupoAdapter(
     private val grupos: List<GrupoResponse>,
-    val onClickListener: OnClickListener
+    var onClickListener: (grupo: GrupoResponse) -> Unit = {}
 ) : RecyclerView.Adapter<GrupoAdapter.GrupoViewHolder>() {
 
-    class GrupoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class GrupoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        private lateinit var grupo: GrupoResponse;
+
+        init {
+            itemView.setOnClickListener {
+                if (::grupo.isInitialized) {
+                    onClickListener(grupo)
+                }
+            }
+        }
+
         val nome: TextView = itemView.findViewById(R.id.textViewGrupo)
         val imagem: ImageView = itemView.findViewById(R.id.imageViewGrupo)
 
-
-    }
-
-    class OnClickListener(val clickListener: (GrupoResponse) -> Unit) {
-        fun onClick(grupo: GrupoResponse) = clickListener(grupo)
+        fun vincula(grupo: GrupoResponse) {
+            this.grupo = grupo
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GrupoViewHolder {
@@ -42,9 +51,8 @@ class GrupoAdapter(
         val decodedBytes = Base64.decode(grupo.imagem, Base64.DEFAULT)
         val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
         holder.imagem.setImageBitmap(bitmap)
-        holder.itemView.setOnClickListener {
-            onClickListener.onClick(grupo)
-        }
+        holder.vincula(grupo)
+
     }
 
 }

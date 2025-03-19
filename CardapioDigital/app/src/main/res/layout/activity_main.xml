@@ -30,8 +30,6 @@
 
             android:layout_gravity="center"
             app:srcCompat="@drawable/baseline_logout_24"/>
-
-
     </LinearLayout>
 
 
@@ -39,10 +37,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Escolha o grupo do produto que deseja adicionar ao pedido"
+        android:text="Clique no grupo para acessar os produtos que deseja adicionar ao pedido"
         android:textStyle="italic"
         android:layout_marginHorizontal="15dp"
-        android:layout_marginBottom="15dp"/>
+/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

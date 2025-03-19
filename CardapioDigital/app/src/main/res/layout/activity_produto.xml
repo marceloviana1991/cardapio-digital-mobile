@@ -8,10 +8,25 @@
     android:orientation="vertical"
     tools:context=".ProdutoActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="Produtos do grupo"
+        android:layout_margin="20dp"
+        android:textStyle="bold"/>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Selecione os itens que deseja adicionar ao pedido"
+        android:textStyle="italic"
+        android:layout_marginHorizontal="15dp" />
 </LinearLayout>

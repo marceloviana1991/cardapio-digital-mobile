@@ -48,19 +48,17 @@ class MainActivity : AppCompatActivity() {
             try {
                 val responseGrupo = RetrofitClient.instance.listarGrupos(token)
                     responseGrupo.body()?.let { grupos ->
-                    binding.recyclerview.adapter =
-                        GrupoAdapter(grupos, GrupoAdapter.OnClickListener { grupo ->
-                            val intent = Intent(this@MainActivity, ProdutoActivity::class.java)
-                            sharedPref.edit().putInt("GRUPO", grupo.id.toInt()).apply()
+                        val adapter = GrupoAdapter(grupos)
+                        binding.recyclerview.adapter = adapter
+                        adapter.onClickListener = { grupo ->
+                            val intent = Intent(
+                                this@MainActivity, ProdutoActivity::class.java
+                            ).apply {
+                                putExtra("GRUPO_ID", grupo.id)
+                                putExtra("GRUPO_IMAGEM", grupo.imagem)
+                            }
                             startActivity(intent)
-
-                            /*FALTA IMPLEMENTAR
-                            *
-                            * O botão aparece quando adiciona o primeiro item ao pedido
-                            */
-                            binding.floatingActionButtonConfirmar.visibility = View.VISIBLE
-                            binding.floatingActionButtonCancelar.visibility = View.VISIBLE
-                        })
+                        }
                 }
             } catch (e: IOException) {
                 Toast.makeText(this@MainActivity, "Falha de conexão", Toast.LENGTH_SHORT).show()

@@ -31,22 +31,20 @@ class ProdutoActivity : AppCompatActivity() {
         }
 
         val sharedPref = getSharedPreferences("APP_PREFS", MODE_PRIVATE)
-        val grupoId = sharedPref.getInt("GRUPO", 0)
+        val grupoId = intent.getIntExtra("GRUPO_ID",0)
+        val grupoImagem = intent.getStringExtra("GRUPO_IMAGEM")
+
+        val decodedBytes = Base64.decode(grupoImagem, Base64.DEFAULT)
+        val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+        binding.imageView.setImageBitmap(bitmap)
 
         lifecycleScope.launch {
             val token = sharedPref.getString("TOKEN", "") ?: ""
             try {
-                val responseGrupo = RetrofitClient.instance.recuperarGrupo(token, grupoId)
-                responseGrupo.body()?.let { grupo ->
-                    val decodedBytes = Base64.decode(grupo.imagem, Base64.DEFAULT)
-                    val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-                    binding.imageView.setImageBitmap(bitmap)
-                }
+                val responseProduto = RetrofitClient.instance.listarProdutosPorGrupo(token, grupoId)
+                responseProduto.body()?.let { produtos ->
 
-//                val responseProduto = RetrofitClient.instance.listarProdutosPorGrupo(token, grupoId)
-//                responseProduto.body()?.let { produtos ->
-//
-//                }
+                }
             } catch (e: IOException) {
                 Toast.makeText(this@ProdutoActivity, "Falha de conexão", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
