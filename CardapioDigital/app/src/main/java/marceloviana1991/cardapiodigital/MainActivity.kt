@@ -69,7 +69,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.floatingActionButtonCancelar.setOnClickListener {
-            PedidoMemory.limpar()
+            AlertDialog.Builder(this@MainActivity)
+                .setTitle("Exckuir itens ao pedido")
+                .setMessage("Deseja confirmar operação?")
+                .setPositiveButton("CONFIRMAR" ) { _, _ ->
+                    PedidoMemory.limpar()
+                }
+                .setNegativeButton("CANCELAR", null)
+                .show()
         }
 
         binding.floatingActionButtonConfirmar.setOnClickListener {
