@@ -4,7 +4,7 @@
 
 ### Fluxo da tela de login
 
-O fluxo da tela de login consiste em fazer uma requisição via protocolo http, passando usuário e senha, autenticar o usuário e ir para a tela principal da aplicação
+O fluxo da tela de login consiste em fazer uma requisição via protocolo http, passando usuário e senha, autenticar o usuário e ir para a tela principal da aplicação.
 
 
 ### Casos de login
