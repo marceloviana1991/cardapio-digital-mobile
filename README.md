@@ -7,3 +7,4 @@ Aplicação android do sistema de cardápio digital
 
 - [Login](doc/login.md)
 - [Main](doc/main.md)
+- [Produtos](doc/produtos.md)
