@@ -43,26 +43,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <ImageView
+        <ImageButton
             android:id="@+id/imageView_adicionar_produto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
             app:srcCompat="@drawable/baseline_add_circle_48" />
 
         <TextView
             android:id="@+id/textView_quantidade_produto"
-            android:layout_width="25dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:paddingHorizontal="20dp"
             android:textSize="30sp"
             android:text="0" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/imageView_remover_produto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
             app:srcCompat="@drawable/baseline_remove_circle_48" />
     </LinearLayout>
 
