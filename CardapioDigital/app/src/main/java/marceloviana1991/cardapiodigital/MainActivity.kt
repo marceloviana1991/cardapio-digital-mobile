@@ -3,6 +3,7 @@ package marceloviana1991.cardapiodigital
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -21,131 +22,142 @@ import okio.IOException
 
 class MainActivity : AppCompatActivity() {
 
-    private val binding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
+private val binding by lazy {
+    ActivityMainBinding.inflate(layoutInflater)
+}
+
+@SuppressLint("SuspiciousIndentation")
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    enableEdgeToEdge()
+    setContentView(binding.root)
+    ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+        insets
     }
 
-    @SuppressLint("SuspiciousIndentation")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    val sharedPref = getSharedPreferences("APP_PREFS", MODE_PRIVATE)
 
-        val sharedPref = getSharedPreferences("APP_PREFS", MODE_PRIVATE)
+    binding.imageButton.setOnClickListener {
+        sharedPref.edit().putString("LOGIN", "").apply()
+        sharedPref.edit().putString("SENHA", "").apply()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 
-        binding.imageButton.setOnClickListener {
-            sharedPref.edit().putString("LOGIN", "").apply()
-            sharedPref.edit().putString("SENHA", "").apply()
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-        lifecycleScope.launch {
-            val token = sharedPref.getString("TOKEN", "") ?: ""
-            try {
-                val responseGrupo = RetrofitClient.instance.listarGrupos(token)
-                    responseGrupo.body()?.let { grupos ->
-                        val adapter = GrupoAdapter(grupos)
-                        binding.recyclerview.adapter = adapter
-                        adapter.onClickListener = { grupo ->
-                            val intent = Intent(
-                                this@MainActivity, ProdutoActivity::class.java
-                            ).apply {
-                                sharedPref.edit().putInt("GRUPO_ID", grupo.id.toInt()).apply()
-                                putExtra("GRUPO_IMAGEM", grupo.imagem)
-                            }
-                            startActivity(intent)
+    lifecycleScope.launch {
+        val token = sharedPref.getString("TOKEN", "") ?: ""
+        try {
+            val responseGrupo = RetrofitClient.instance.listarGrupos(token)
+                responseGrupo.body()?.let { grupos ->
+                    val adapter = GrupoAdapter(grupos)
+                    binding.recyclerview.adapter = adapter
+                    adapter.onClickListener = { grupo ->
+                        val intent = Intent(
+                            this@MainActivity, ProdutoActivity::class.java
+                        ).apply {
+                            sharedPref.edit().putInt("GRUPO_ID", grupo.id.toInt()).apply()
+                            putExtra("GRUPO_IMAGEM", grupo.imagem)
                         }
-                }
-            } catch (e: IOException) {
-                Toast.makeText(this@MainActivity, "Falha de conexão", Toast.LENGTH_SHORT).show()
-            } catch (e: Exception) {
-                Toast.makeText(this@MainActivity, "Erro inesperado", Toast.LENGTH_SHORT).show()
+                        startActivity(intent)
+                    }
             }
+        } catch (e: IOException) {
+            Toast.makeText(this@MainActivity, "Falha de conexão", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(this@MainActivity, "Erro inesperado", Toast.LENGTH_SHORT).show()
         }
+    }
 
 
 
-        binding.floatingActionButtonCancelar.setOnClickListener {
-            val finalizarPedidoBinding = FinalizarPedidoBinding.inflate(layoutInflater)
+    binding.floatingActionButtonCancelar.setOnClickListener {
+        val finalizarPedidoBinding = FinalizarPedidoBinding.inflate(layoutInflater)
 
-            val adapterFinalizarPedido = ArrayAdapter(
-                finalizarPedidoBinding.root.context,
-                android.R.layout.simple_list_item_1,
-                PedidoMemory.registrarPedidoPorNome()
-            )
-            finalizarPedidoBinding.listViewFinalizarPedido.adapter = adapterFinalizarPedido
+        val adapterFinalizarPedido = ArrayAdapter(
+            finalizarPedidoBinding.root.context,
+            android.R.layout.simple_list_item_1,
+            PedidoMemory.registrarPedidoPorNome()
+        )
+        finalizarPedidoBinding.listViewFinalizarPedido.adapter = adapterFinalizarPedido
+        AlertDialog.Builder(this@MainActivity)
+            .setTitle("Cancelar pedido")
+            .setMessage("Deseja confirmar operação?")
+            .setView(finalizarPedidoBinding.root)
+            .setPositiveButton("CONFIRMAR" ) { _, _ ->
+                binding.floatingActionButtonCancelar.visibility = View.GONE
+                binding.floatingActionButtonConfirmar.visibility = View.GONE
+                PedidoMemory.limpar()
+            }
+            .setNegativeButton("CANCELAR", null)
+            .show()
+    }
+
+    binding.floatingActionButtonConfirmar.setOnClickListener {
+        val finalizarPedidoBinding = FinalizarPedidoBinding.inflate(layoutInflater)
+
+        val adapterFinalizarPedido = ArrayAdapter(
+            finalizarPedidoBinding.root.context,
+            android.R.layout.simple_list_item_1,
+            PedidoMemory.registrarPedidoPorNome()
+        )
+        finalizarPedidoBinding.listViewFinalizarPedido.adapter = adapterFinalizarPedido
             AlertDialog.Builder(this@MainActivity)
-                .setTitle("Cancelar pedido")
+                .setTitle("Confirmar pedido")
                 .setMessage("Deseja confirmar operação?")
                 .setView(finalizarPedidoBinding.root)
                 .setPositiveButton("CONFIRMAR" ) { _, _ ->
-                    PedidoMemory.limpar()
-                }
-                .setNegativeButton("CANCELAR", null)
-                .show()
-        }
+                    val token = sharedPref.getString("TOKEN", "") ?: ""
+                    val pedidosEmMemoria = PedidoMemory.registrar()
+                    lifecycleScope.launch {
+                        try {
+                            // Chamada de Retrofit suspensa
+                            val response =
+                                RetrofitClient.instance.registrarPedido(token, pedidosEmMemoria)
 
-        binding.floatingActionButtonConfirmar.setOnClickListener {
-            val finalizarPedidoBinding = FinalizarPedidoBinding.inflate(layoutInflater)
-
-            val adapterFinalizarPedido = ArrayAdapter(
-                finalizarPedidoBinding.root.context,
-                android.R.layout.simple_list_item_1,
-                PedidoMemory.registrarPedidoPorNome()
-            )
-            finalizarPedidoBinding.listViewFinalizarPedido.adapter = adapterFinalizarPedido
-                AlertDialog.Builder(this@MainActivity)
-                    .setTitle("Confirmar pedido")
-                    .setMessage("Deseja confirmar operação?")
-                    .setView(finalizarPedidoBinding.root)
-                    .setPositiveButton("CONFIRMAR" ) { _, _ ->
-                        val token = sharedPref.getString("TOKEN", "") ?: ""
-                        val pedidosEmMemoria = PedidoMemory.registrar()
-                        lifecycleScope.launch {
-                            try {
-                                // Chamada de Retrofit suspensa
-                                val response =
-                                    RetrofitClient.instance.registrarPedido(token, pedidosEmMemoria)
-
-                                // Verificando a resposta
-                                if (response.isSuccessful) {
-                                    // Se o pedido foi registrado com sucesso
-                                    PedidoMemory.limpar() // Limpa os pedidos em memória
-                                    Toast.makeText(
-                                        this@MainActivity,
-                                        "Pedido registrado com sucesso",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                } else {
-                                    // Se ocorreu um erro ao registrar
-                                    Toast.makeText(
-                                        this@MainActivity,
-                                        "Erro ao registrar o pedido",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            } catch (e: Exception) {
-                                // Lidar com erro de rede ou outra falha
+                            // Verificando a resposta
+                            if (response.isSuccessful) {
+                                // Se o pedido foi registrado com sucesso
+                                PedidoMemory.limpar() // Limpa os pedidos em memória
                                 Toast.makeText(
                                     this@MainActivity,
-                                    "Erro de conexão: ${e.message}",
+                                    "Pedido registrado com sucesso",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                // Se ocorreu um erro ao registrar
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    "Erro ao registrar o pedido",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
-
+                        } catch (e: Exception) {
+                            // Lidar com erro de rede ou outra falha
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Erro de conexão: ${e.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                    }
-                    .setNegativeButton("CANCELAR", null)
-                    .show()
 
-            }
+                    }
+                }
+                .setNegativeButton("CANCELAR", null)
+                .show()
+
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        if (PedidoMemory.registrar().isNotEmpty()) {
+            binding.floatingActionButtonCancelar.visibility = View.VISIBLE
+            binding.floatingActionButtonConfirmar.visibility = View.VISIBLE
+        }
+    }
+}
+
 

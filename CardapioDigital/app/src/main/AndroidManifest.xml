@@ -16,9 +16,6 @@
         android:theme="@style/Theme.CardapioDigital"
         tools:targetApi="31">
         <activity
-            android:name=".http.MainActivity2"
-            android:exported="false" />
-        <activity
             android:name=".ProdutoActivity"
             android:exported="false" />
         <activity

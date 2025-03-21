@@ -54,6 +54,7 @@
             app:layout_constraintBottom_toTopOf="@+id/floatingActionButton_cancelar"
             android:layout_margin="15dp"
             app:icon="@drawable/baseline_add_task_24"
+            android:visibility="gone"
             android:text="Finalizar"/>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -64,7 +65,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="15dp"
-
+            android:visibility="gone"
             android:text="Cancelar"/>
 
         <androidx.recyclerview.widget.RecyclerView
